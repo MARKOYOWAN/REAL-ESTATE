@@ -2,59 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ====================================
+   BASE
+==================================== */
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    /* Utilisation de la couleur directe pour éviter les erreurs PostCSS au démarrage */
-    background-color: #f5f5f7; 
-    color: #121212;
-    @apply antialiased;
+    @apply bg-app-bg text-text-primary antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Personnalisation de la sélection pour un look premium */
+  h1,h2,h3,h4 {
+    @apply font-heading tracking-tight text-text-primary;
+  }
+
+  p {
+    @apply text-text-secondary leading-relaxed;
+  }
+
   ::selection {
-    background-color: rgba(99, 102, 241, 0.2); /* Accent Indigo léger */
-    color: #121212;
+    @apply bg-primary-200 text-text-primary;
   }
 }
+
+/* ====================================
+   COMPONENTS
+==================================== */
 
 @layer components {
-  /* La carte Spinn : Fond blanc, bords très arrondis et ombre diffuse */
-  .spinn-card {
-    @apply bg-white border border-black/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[2.5rem];
+
+  /* Card standard */
+  .card {
+    @apply bg-app-surface border border-border rounded-2xl shadow-soft p-6 transition hover:shadow-medium;
   }
 
-  /* Bouton principal Noir */
-  .btn-spinn {
-    @apply bg-spinn-black text-white px-8 py-4 rounded-2xl font-bold transition-all 
-           hover:bg-neutral-800 active:scale-95 shadow-lg shadow-black/10 flex items-center justify-center gap-2;
+  /* Premium Card */
+  .card-premium {
+    @apply bg-app-surface border border-border rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-8;
   }
+
+  /* Glass effect card */
+  .card-glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/30 rounded-3xl shadow-glass;
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    @apply bg-brand-gold text-brand-black px-6 py-3 rounded-2xl font-semibold
+           transition-all duration-200 hover:bg-brand-goldLight
+           active:scale-95 shadow-md shadow-brand-gold/20;
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-app-muted text-text-primary px-6 py-3 rounded-2xl font-medium
+           hover:bg-border transition;
+  }
+
+  /* Modern Input */
+  .input-modern {
+    @apply w-full bg-app-surface border border-border rounded-xl px-4 py-3
+           focus:outline-none focus:ring-2 focus:ring-brand-goldLight
+           text-text-primary placeholder:text-text-muted transition;
+  }
+
 }
 
+/* ====================================
+   UTILITIES
+==================================== */
+
 @layer utilities {
-  /* Barres de défilement minimalistes pour le gris clair */
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-black/10 rounded-full hover:bg-black/20 transition-colors;
+    @apply bg-border rounded-full hover:bg-text-muted transition-colors;
   }
 
-  /* Animation de flottement pour les éléments décoratifs */
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/30 rounded-3xl shadow-glass;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  .text-gold {
+    @apply text-brand-gold;
   }
-}
 
-html {
-  scroll-behavior: smooth;
+  .text-black-brand {
+    @apply text-brand-black;
+  }
+
+  .bg-gradient-login {
+    @apply bg-gradient-login;
+  }
+
+  .bg-gradient-brand {
+    @apply bg-gradient-brand;
+  }
 }
