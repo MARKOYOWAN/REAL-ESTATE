@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../services/useAuth";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 interface LoginFormProps {
     redirectTo?: string;
@@ -11,6 +12,7 @@ const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [touched, setTouched] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // 🔹 toggle password visibility
 
     const { loginService, loading, error } = useAuth();
     const navigate = useNavigate();
@@ -30,24 +32,13 @@ const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
 
             {/* ================= LEFT - VISUEL BRANDING ================= */}
             <div className="hidden lg:flex flex-col items-center justify-center px-16 py-12 bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end text-white text-center">
-
-                {/* Logo centré et grand */}
-                <img
-                    src="/logo/logo.png"
-                    alt="Logo"
-                    className="w-40 h-40 mb-8 object-contain"
-                />
-
-                {/* Titre */}
+                <img src="/logo/logo.png" alt="Logo" className="w-40 h-40 mb-8 object-contain" />
                 <h1 className="text-5xl font-extrabold leading-tight mb-4">
                     Bienvenue sur <span className="text-brand-gold">REAL.ESTATE</span>
                 </h1>
-
-                {/* Description */}
-                <p className="text-lg text-black max-w-md">
+                <p className="text-lg text-white/90 max-w-md">
                     Gestion simple, rapide et moderne de vos annonces immobilières. Publiez, modérez et suivez vos performances.
                 </p>
-
             </div>
 
             {/* ================= RIGHT - FORMULAIRE ================= */}
@@ -60,12 +51,8 @@ const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
                 >
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl font-bold text-brand-blackLight">
-                            Se connecter
-                        </h2>
-                        <p className="text-sm text-gray-600 mt-1">
-                            Entrez vos identifiants pour continuer
-                        </p>
+                        <h2 className="text-3xl font-bold text-brand-blackLight">Se connecter</h2>
+                        <p className="text-sm text-gray-600 mt-1">Entrez vos identifiants pour continuer</p>
                     </div>
 
                     {/* Inputs */}
@@ -86,15 +73,23 @@ const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
                         </div>
 
                         {/* PASSWORD FIELD */}
-                        <div>
+                        <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-goldLight transition"
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-goldLight transition pr-14"
                             />
+                            {/* Eye Icon */}
+                            <button
+                                type="button"
+                                className="absolute right-3 top-[65%] transform -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-gray-700"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <HiEyeOff size={24} /> : <HiEye size={24} />}
+                            </button>
                             {touched && !password && (
                                 <p className="text-sm text-red-500 mt-1">Mot de passe requis</p>
                             )}
@@ -110,19 +105,17 @@ const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
                         </button>
 
                         {error && (
-                            <p className="text-center text-sm text-red-500">
-                                {error}
-                            </p>
+                            <p className="text-center text-sm text-red-500">{error}</p>
                         )}
                     </div>
 
                     {/* FOOTER */}
-                    <p className="text-center text-sm text-gray-600 mt-8">
-                        Pas encore de compte ?{" "}
-                        <span className="text-brand-gold font-bold cursor-pointer hover:underline">
-                            S’inscrire
-                        </span>
-                    </p>
+                    {/* <p className="text-center text-sm text-gray-600 mt-8">
+            Pas encore de compte ?{" "}
+            <span className="text-brand-gold font-bold cursor-pointer hover:underline">
+              S’inscrire
+            </span>
+          </p> */}
                 </motion.div>
             </div>
         </div>
