@@ -7,34 +7,79 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Le fond du site Spinn en version claire est un gris très doux
-        'spinn-bg': '#f5f5f7', 
-        // Texte noir profond pour un contraste maximal
-        'spinn-black': '#121212',
-        // Cartes blanches ou gris très clair pour l'effet de relief
-        'spinn-card': '#ffffff',
-        // Bordures fines et discrètes
-        'spinn-border': '#e5e7eb',
-        // Gris pour les textes secondaires
-        'spinn-muted': '#6b7280',
-        
-        // Couleur d'accent (Bleu Acier ou Indigo léger)
-        'spinn-accent': {
-          DEFAULT: '#6366f1',
-          light: '#818cf8',
+        primary: {
+          50:  "#eef2ff",
+          100: "#e0e7ff",
+          200: "#c7d2fe",
+          300: "#a5b4fc",
+          400: "#818cf8",
+          500: "#6366f1", // Brand
+          600: "#4f46e5",
+          700: "#4338ca",
+          800: "#3730a3",
+          900: "#312e81",
         },
+
+        brand: {
+          gold: '#D3BE6D',
+          goldLight: '#E6DDA0',
+          black: '#161616',
+          blackLight: '#2A2A2A',
+        },
+
+        app: {
+          bg: "#f9fafb",        // main background
+          surface: "#ffffff",   // cards
+          muted: "#f3f4f6",     // sections
+        },
+
+        text: {
+          primary: "#111827",    // main text
+          secondary: "#4b5563",  // paragraph
+          muted: "#6b7280",
+          inverted: "#ffffff",
+        },
+
+        border: {
+          DEFAULT: "#e5e7eb",
+          strong: "#d1d5db",
+        },
+
+        success: "#10b981",
+        danger: "#ef4444",
       },
-      animation: {
-        'blob': 'blob 10s infinite',
+
+      borderRadius: {
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
+        "4xl": "2.5rem",
       },
-      keyframes: {
-        blob: {
-          '0%': { transform: 'translate(0px, 0px) scale(1)', opacity: 0.2 },
-          '33%': { transform: 'translate(30px, -50px) scale(1.1)', opacity: 0.4 },
-          '66%': { transform: 'translate(-20px, 20px) scale(0.9)', opacity: 0.2 },
-          '100%': { transform: 'translate(0px, 0px) scale(1)', opacity: 0.2 },
-        }
-      }
+
+      boxShadow: {
+        soft: "0 4px 20px rgba(0,0,0,0.05)",
+        medium: "0 10px 40px rgba(0,0,0,0.08)",
+        glass: "0 8px 32px rgba(0,0,0,0.08)",
+      },
+
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+        heading: ['Poppins', 'ui-sans-serif', 'system-ui'],
+      },
+
+      screens: {
+        'xs': '480px',
+      },
+
+      backgroundImage: {
+        'gradient-brand': 'linear-gradient(135deg,#D3BE6D 0%,#E6DDA0 100%)',
+        'gradient-login': 'linear-gradient(135deg,#0F0C29,#302b63,#24243e)',
+      },
+
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding',
+      },
     },
   },
   plugins: [],
