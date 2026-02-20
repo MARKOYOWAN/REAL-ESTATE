@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         primary: {
-          50:  "#eef2ff",
+          50: "#eef2ff",
           100: "#e0e7ff",
           200: "#c7d2fe",
           300: "#a5b4fc",
@@ -79,6 +79,15 @@ export default {
       transitionProperty: {
         'height': 'height',
         'spacing': 'margin, padding',
+      },
+      keyframes: {
+        "bounce-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-15%)" },
+        },
+      },
+      animation: {
+        "bounce-slow": "bounce-slow 1.5s infinite",
       },
     },
   },

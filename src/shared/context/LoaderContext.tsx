@@ -1,61 +1,32 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+// src/shared/context/LoaderContext.tsx
+import { createContext, useContext, useState, type ReactNode, useCallback } from "react";
 
-/**
- * Interface définissant les méthodes et l'état du Loader.
- */
-interface LoaderContextType {
-    /** Incrémente le compteur de requêtes actives */
-    showLoader: () => void;
-    /** Décrémente le compteur de requêtes actives */
-    hideLoader: () => void;
-    /** Indique si au moins une requête est en cours */
-    isLoading: boolean;
+interface LoaderContextProps {
+  isLoading: boolean;
+  showLoader: () => void;
+  hideLoader: () => void;
 }
 
-// Création du contexte avec une valeur initiale indéfinie
-const LoaderContext = createContext<LoaderContextType | undefined>(undefined);
+const LoaderContext = createContext<LoaderContextProps>({
+  isLoading: false,
+  showLoader: () => {},
+  hideLoader: () => {},
+});
 
-/**
- * LoaderProvider : Composant enveloppe (Wrapper)
- * Il gère un compteur de requêtes pour éviter que le loader ne disparaisse 
- * si plusieurs appels API sont lancés simultanément.
- */
-export const LoaderProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Nombre de requêtes HTTP actuellement en attente
-    const [activeRequests, setActiveRequests] = useState(0);
+export const LoaderProvider = ({ children }: { children: ReactNode }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
-    /**
-     * Mémorisation des actions pour optimiser les performances.
-     * On ne recrée l'objet que si le nombre de requêtes change.
-     */
-    const loaderActions = useMemo(() => ({
-        // On ajoute une requête
-        showLoader: () => setActiveRequests((prev) => prev + 1),
-        
-        // On retire une requête (sans jamais descendre en dessous de zéro)
-        hideLoader: () => setActiveRequests((prev) => Math.max(0, prev - 1)),
-        
-        // État booléen dérivé du compteur
-        isLoading: activeRequests > 0
-    }), [activeRequests]);
+  // fonctions stables avec useCallback pour éviter les re-renders inutiles
+  const showLoader = useCallback(() => setIsLoading(true), []);
+  const hideLoader = useCallback(() => setIsLoading(false), []);
 
-    return (
-        <LoaderContext.Provider value={loaderActions}>
-            {children}
-        </LoaderContext.Provider>
-    );
+  return (
+    <LoaderContext.Provider value={{ isLoading, showLoader, hideLoader }}>
+      {children}
+    </LoaderContext.Provider>
+  );
 };
 
-/**
- * Hook personnalisé useLoader
- * Permet aux composants enfants d'accéder facilement aux fonctions du loader.
- * @throws Erreur si utilisé en dehors du LoaderProvider.
- */
+// Hook pratique pour utiliser le loader dans n'importe quel composant
 // eslint-disable-next-line react-refresh/only-export-components
-export const useLoader = () => {
-    const context = useContext(LoaderContext);
-    if (!context) {
-        throw new Error("useLoader must be used within a LoaderProvider");
-    }
-    return context;
-};
+export const useLoader = () => useContext(LoaderContext);
