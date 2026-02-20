@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useAuth } from "../services/useAuth";
+import { motion } from "framer-motion"; 
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import { useAuthContext } from "../../context/AuthContext";
 
 interface LoginFormProps {
     redirectTo?: string;
@@ -10,22 +10,22 @@ interface LoginFormProps {
 
 const LoginForm = ({ redirectTo = "/home" }: LoginFormProps) => {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [touched, setTouched] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); // 🔹 toggle password visibility
+  const [password, setPassword] = useState("");
+  const [touched, setTouched] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const { loginService, loading, error } = useAuth();
-    const navigate = useNavigate();
+  const { loginService, loading, error } = useAuthContext();
+  const navigate = useNavigate();
 
-    const isFormValid = email.trim() !== "" && password.trim() !== "";
+  const isFormValid = email.trim() !== "" && password.trim() !== "";
 
-    const handleLogin = useCallback(async () => {
-        setTouched(true);
-        if (!isFormValid) return;
+  const handleLogin = useCallback(async () => {
+    setTouched(true);
+    if (!isFormValid) return;
 
-        const success = await loginService(email, password);
-        if (success) navigate(redirectTo);
-    }, [email, password, loginService, navigate, redirectTo, isFormValid]);
+    const success = await loginService(email, password);
+    if (success) navigate(redirectTo);
+  }, [email, password, loginService, navigate, redirectTo, isFormValid]);
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2 items-center bg-gray-50">
