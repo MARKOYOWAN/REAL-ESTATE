@@ -41,8 +41,8 @@ const Header = () => {
             alt="Logo"
             className="w-10 h-10 object-contain"
           />
-          <span className="font-extrabold text-xl tracking-tight hidden sm:block">
-            REAL<span className="opacity-30">.ESTATE</span>
+          <span className="font-extrabold text-brand-gold text-xl tracking-tight hidden sm:block">
+            REAL<span className="opacity-50">.ESTATE</span>
           </span>
         </NavLink>
 

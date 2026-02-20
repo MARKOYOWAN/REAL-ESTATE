@@ -8,55 +8,52 @@ export const useAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // 🔹 Login moderne avec useCallback
+    // Login avec Supabase
     const loginService = useCallback(
-        async (email: string, password: string) => {
+        async (email: string, password: string): Promise<boolean> => {
             setLoading(true);
             setError(null);
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-            if (error) {
-                setError(error.message);
+                if (error) {
+                    setError(error.message);
+                    setLoading(false);
+                    return false;
+                }
+
+                setUser(data.user ?? null); // sécurité si user est null
+                setLoading(false);
+                return true;
+            } catch (err: unknown) {
+                // Vérification que err est bien une erreur JS standard
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError("Une erreur inattendue est survenue");
+                }
                 setLoading(false);
                 return false;
             }
-            console.log("data",data)
-
-            setUser(data.user);
-            setLoading(false);
-            return true;
         },
         []
     );
 
-    // 🔹 Observer les changements d’auth
+    // Observer la session actuelle
     useEffect(() => {
         const getSession = async () => {
             const { data } = await supabase.auth.getSession();
             setUser(data.session?.user ?? null);
         };
-
         getSession();
 
-        const { data: listener } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                setUser(session?.user ?? null);
-            }
-        );
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
 
-        return () => {
-            listener.subscription.unsubscribe();
-        };
+        return () => listener.subscription.unsubscribe();
     }, []);
 
-    return {
-        user,
-        loginService,
-        loading,
-        error,
-    };
+    return { user, loginService, loading, error };
 };

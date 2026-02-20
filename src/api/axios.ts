@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import axios, { 
-  AxiosError, 
-  type InternalAxiosRequestConfig, 
-  type AxiosResponse 
+import axios, {
+  AxiosError,
+  type InternalAxiosRequestConfig,
+  type AxiosResponse
 } from "axios";
 import toast from "react-hot-toast";
 
@@ -57,13 +57,13 @@ export const createApiService = (customBaseURL?: string) => {
     // CAS SUCCÈS (2xx)
     (response: AxiosResponse): AxiosResponse => {
       loaderBus.hide();
-      
+
       const config = response.config;
       // Notification automatique de succès si paramétrée dans l'appel
       if (config.showToast !== false && config.successMessage) {
         toast.success(config.successMessage);
       }
-      
+
       return response;
     },
     // CAS ERREUR (4xx, 5xx, Réseau)
@@ -77,12 +77,12 @@ export const createApiService = (customBaseURL?: string) => {
       // Gestion des erreurs sans réponse serveur (ex: Serveur éteint)
       if (!response) {
         finalErrorMessage = config?.errorMessage || "Le serveur est injoignable (Port 3000).";
-      } 
+      }
       // Gestion des erreurs renvoyées par l'API (ex: 422 Validation)
       else {
         const serverMessage = (response.data as { message?: string })?.message;
         finalErrorMessage = config?.errorMessage || serverMessage || "Une erreur est survenue.";
-        
+
         // Logique spécifique par code HTTP
         if (response.status === 401) console.warn("Session expirée (401)");
       }
