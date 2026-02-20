@@ -1,55 +1,30 @@
-import { useState, useEffect } from 'react';
+// src/shared/components/GlobalLoader.tsx
+import { useLoader } from "../context/LoaderContext";
 
-/**
- * Composant GlobalLoader
- * Affiche une superposition (overlay) de chargement sur toute l'application.
- * Il écoute des événements personnalisés (CustomEvents) déclenchés 
- * généralement par les intercepteurs Axios.
- */
 const GlobalLoader = () => {
-    // État gérant la visibilité du loader
-    const [visible, setVisible] = useState(false);
+    const { isLoading } = useLoader();
 
-    useEffect(() => {
-        // Fonctions de mise à jour de l'état
-        const show = () => setVisible(true);
-        const hide = () => setVisible(false);
-
-        /**
-         * Écouteurs d'événements globaux (Event Bus)
-         * Permet de piloter le loader depuis n'importe quel fichier JS/TS
-         * sans avoir recours à un Context ou un Store complexe.
-         */
-        window.addEventListener('SHOW_LOADER', show);
-        window.addEventListener('HIDE_LOADER', hide);
-
-        // Nettoyage des écouteurs lors de la destruction du composant
-        return () => {
-            window.removeEventListener('SHOW_LOADER', show);
-            window.removeEventListener('HIDE_LOADER', hide);
-        };
-    }, []);
-
-    // Si le loader n'est pas actif, on ne rend rien dans le DOM
-    if (!visible) return null;
+    if (!isLoading) return null;
 
     return (
-        /** * Overlay plein écran avec flou (backdrop-blur)
-         * Le z-index est fixé à 100 pour être au-dessus du contenu mais 
-         * potentiellement sous les Toasts (configurés à 9999).
-         */
-        <div className="fixed inset-0 z-[100] bg-white/60 backdrop-blur-md flex items-center justify-center transition-all duration-300">
-            <div className="flex flex-col items-center gap-4">
-                
-                {/* Spinner animé en CSS pur */}
-                <div className="w-12 h-12 border-4 border-black/10 border-t-black rounded-full animate-spin" />
-                
-                {/* Texte d'accompagnement avec effet de pulsation */}
-                <p className="text-xs font-black uppercase tracking-[0.3em] text-black animate-pulse">
-                    Analyse en cours
-                </p>
-                
+        <div className="fixed inset-0 z-[9999] bg-white/70 backdrop-blur-md flex flex-col items-center justify-center transition-all duration-300">
+            {/* Logo animé */}
+            <img
+                src="/logo/logo.png"
+                alt="Logo"
+                className="w-24 h-24 mb-6 animate-bounce-slow"
+            />
+
+            {/* Spinner stylé */}
+            <div className="relative w-16 h-16">
+                <div className="absolute inset-0 border-4 border-gray-200 rounded-full" />
+                <div className="absolute inset-0 border-4 border-t-brand-gold border-l-transparent rounded-full animate-spin" />
             </div>
+
+            {/* Texte animé */}
+            <p className="mt-4 text-sm font-bold uppercase tracking-wider text-black animate-pulse">
+                Chargement en cours...
+            </p>
         </div>
     );
 };
